@@ -16,19 +16,23 @@ int Calculate(int a, int b, int c, int y)
   cdq;
   xor ecx, ecx;
   mov ecx, 3;
-  idiv ecx;
-  mov ost, edx;
-  xor ecx, ecx;
-  mov ecx, a;
-  cdq;
-  idiv ecx;
-  mov ecx, ost;
-  imul edx, ecx;
-
-
-
-
-  mov result, edx
+  mov esi, a;
+  imul esi, ecx;         3*a
+  idiv  esi;
+  imul edx, 2;     mutiply f compare
+  cmp esi, edx
+  jl end;
+  jg plusend;
+  je equal;
+  equal:
+    test eax,1;
+	jnz   O;
+	jz    Even
+    jmp end;
+  plusend:
+    add eax,1;
+  end:
+  mov result, eax
   }
 
   return result;
