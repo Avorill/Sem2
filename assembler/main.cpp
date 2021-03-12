@@ -10,38 +10,56 @@ int Calculate(int a, int b, int c, int y)
   {
   mov eax, b;				  b -> eax
   IMUL y; 					  eax*y
-  xor edx, edx;				 clear edx
+  ;xor edx, edx;				 clear edx
   ADD  eax, c;				 add c to eax
   NEG eax;					-eax
   cdq;
-  xor ecx, ecx;
+ ; xor ecx, ecx;
   mov ecx, 3;
   mov esi, a;
+  mov ost, eax;
   imul esi, ecx;         3*a
   idiv  esi;
+  jp end
   imul edx, 2;     mutiply f compare
-  cmp esi, edx
-  jl end;
-  jg plusend;
-  je equal;
-  equal:
-    test eax,1;
-	jnz   O;
-	jz    Even
-    jmp end;
-  plusend:
-    add eax,1;
+  cmp  esi,0
+  jge ent
+   cmp ost,0
+   jge ent
+   neg esi
+  ent:
+  cmp ost, 0
+  jne etc
+   jmp end;
+  etc:
+  cmp esi, edx;   //  6 vs. 8
+  jnle NNegBigDiv;
+  	 jmp end;
+  NNegBigDiv:
+    jnge NNegLessDiv;
+      add eax, 1
+      jmp end;
+      NNegLessDiv:
+    	jne NNegEqualDiv;
+    	   test eax, 1
+    	   jz Evn;
+    	    jmp result;
+    	   Evn:
+              add eax, 1
+              NNegEqualDiv:
+
   end:
   mov result, eax
+
   }
 
-  return result;
+  return   result;
 }
 
 int main(){
-  std::cout<<"a, b,c, y\n"<<">";
+  std::cout<<"a, b,y, c\n"<<">";
   int a, b, c, y;
-  std::cin>>a>>b>>c>>y;
+  std::cin>>a>>b>>y>>c;
   std::cout<<Calculate(a,b,c,y);
 
 
@@ -49,3 +67,5 @@ int main(){
 
 
 }
+
+
