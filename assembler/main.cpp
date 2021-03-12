@@ -5,7 +5,7 @@
 int Calculate(int a, int b, int c, int y)
 {
   int result;
-	int ost;
+  int ost;
   __asm
   {
   mov eax, b;				  b -> eax
@@ -14,40 +14,70 @@ int Calculate(int a, int b, int c, int y)
   ADD  eax, c;				 add c to eax
   NEG eax;					-eax
   cdq;
- ; xor ecx, ecx;
+  ; xor ecx, ecx;
   mov ecx, 3;
   mov esi, a;
   mov ost, eax;
   imul esi, ecx;         3*a
   idiv  esi;
-  jp end
+
   imul edx, 2;     mutiply f compare
+
+
   cmp  esi,0
   jge ent
-   cmp ost,0
-   jge ent
-   neg esi
+  cmp ost,0
+  jge ent
+  neg esi
   ent:
   cmp ost, 0
   jne etc
-   jmp end;
+  jmp end;
   etc:
+  cmp eax,0
+  jl negative
+
+
   cmp esi, edx;   //  6 vs. 8
   jnle NNegBigDiv;
-  	 jmp end;
+  jmp end;
   NNegBigDiv:
-    jnge NNegLessDiv;
-      add eax, 1
-      jmp end;
-      NNegLessDiv:
-    	jne NNegEqualDiv;
-    	   test eax, 1
-    	   jz Evn;
-    	    jmp result;
-    	   Evn:
-              add eax, 1
-              NNegEqualDiv:
+  jnge NNegLessDiv;
+  add eax, 1
+  jmp end;
+  NNegLessDiv:
+  jne NNegEqualDiv;
+  test eax, 1
+  jz Evn;
+  jmp result;
+  Evn:
+  add eax, 1
+  NNegEqualDiv:
+    jmp end
 
+
+
+  negative:
+    cmp esi, 0
+    jl  after
+    neg esi
+    after:
+	  cmp esi, edx;   //  6 vs. 8
+	  jnle NegBigDiv;
+	  add eax, -1
+	  jmp end;
+	  NegBigDiv:
+	  jnge NegLessDiv;
+	  jmp end;
+	  NegLessDiv:
+	  jne NegEqualDiv;
+	  test eax, 1
+	  jz Evn_2;
+      add eax, -1
+	  jmp end
+	  Evn_2:
+	  NegEqualDiv:
+	  jmp end
   end:
   mov result, eax
 
