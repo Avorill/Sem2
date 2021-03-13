@@ -43,7 +43,7 @@ int Calculate(int a, int b, int c, int y)
   jmp end;
   NNegBigDiv:
   jnge NNegLessDiv;
-  add eax, 1
+  inc eax
   jmp end;
   NNegLessDiv:
   jne NNegEqualDiv;
@@ -51,7 +51,7 @@ int Calculate(int a, int b, int c, int y)
   jz Evn;
   jmp result;
   Evn:
-  add eax, 1
+  inc eax
   NNegEqualDiv:
     jmp end
 
@@ -64,7 +64,7 @@ int Calculate(int a, int b, int c, int y)
     after:
 	  cmp esi, edx;   //  6 vs. 8
 	  jnle NegBigDiv;
-	  add eax, -1
+	  dec eax
 	  jmp end;
 	  NegBigDiv:
 	  jnge NegLessDiv;
@@ -73,7 +73,7 @@ int Calculate(int a, int b, int c, int y)
 	  jne NegEqualDiv;
 	  test eax, 1
 	  jz Evn_2;
-      add eax, -1
+      dec eax
 	  jmp end
 	  Evn_2:
 	  NegEqualDiv:
