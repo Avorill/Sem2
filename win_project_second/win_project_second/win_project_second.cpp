@@ -5,6 +5,7 @@
 #include "win_project_second.h"
 #include <WinUser.h>
 #include <math.h>
+#include <string>
 #include <cmath>
 #define MAX_LOADSTRING 100
 const int R = 200;
@@ -239,7 +240,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		SelectObject(hdc, GetStockObject(DC_BRUSH));
 		SetDCBrushColor(hdc, RGB(255, 125, 156));
 		Ellipse(hdc, x_circle - 10, y_circle - 10, x_circle + 10, y_circle + 10);
-		
+		auto text = std::to_string(x_circle) + ", " + std::to_string(y_circle);
+		auto rect = RECT{ 0, 0, 500, 500 };
+		std::wstring stemp = std::wstring(text.begin(), text.end());
+		LPCWSTR sw = stemp.c_str();
+		SetTextColor(hdc, RGB(0, 255, 100));
+		DrawText(hdc, sw, -1, &rect, DT_BOTTOM);
 		EndPaint(hWnd, &ps);
 	}
 	break;
