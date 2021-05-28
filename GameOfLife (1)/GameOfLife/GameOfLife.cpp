@@ -17,7 +17,7 @@ class State
 {
     bool _isAlive;
 
-public: 
+public:
     State(bool isAlive)
     {
         _isAlive = isAlive;
@@ -177,6 +177,7 @@ private:
 };
 
 Grid grid = Grid(10, 10);
+grid = Grid(9, 10);
 LifeEngine lifeEngine;
 
 // Global Variables:
@@ -191,9 +192,9 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR    lpCmdLine,
+    _In_ int       nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -206,7 +207,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
@@ -225,7 +226,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    return (int) msg.wParam;
+    return (int)msg.wParam;
 }
 
 
@@ -241,17 +242,17 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GAMEOFLIFE));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_GAMEOFLIFE);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GAMEOFLIFE));
+    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_GAMEOFLIFE);
+    wcex.lpszClassName = szWindowClass;
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     return RegisterClassExW(&wcex);
 }
@@ -268,20 +269,20 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    if (!hWnd)
+    {
+        return FALSE;
+    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   return TRUE;
+    return TRUE;
 }
 
 void DrawGrid(HWND hWnd, HDC hdc)
@@ -347,11 +348,11 @@ void OnPaint(HWND hWnd)
 {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
-    
+
     DrawGrid(hWnd, hdc);
     yellowRECT(hWnd, hdc);
     DrawCells(hWnd, hdc);
-  
+
     EndPaint(hWnd, &ps);
 }
 
@@ -387,21 +388,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
         {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-           
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
         }
-        break;
+    }
+    break;
 
     case WM_LBUTTONDOWN:
     {
@@ -412,57 +413,65 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_RBUTTONDOWN:
     {
-        grid.GetCell(GET_Y_LPARAM(lParam) / 
+        grid.GetCell(GET_Y_LPARAM(lParam) /
             (clientRect.bottom / grid.GetHeight()), GET_X_LPARAM(lParam) / (clientRect.right / grid.GetWidth())).SetIsAlive(false);
         InvalidateRect(hWnd, nullptr, true);
         break;
     }
     case WM_KEYDOWN:
-   
-         if (wParam == VK_SPACE)
+
+        if (wParam == VK_SPACE)
         {
-             
-             if (process) {
-                 process = false;
-                 KillTimer(hWnd, 0);
+
+            if (process) {
+                process = false;
+                KillTimer(hWnd, 0);
             }
-             else {
-                 process = true;
-                 SetTimer(hWnd,0, 1000, nullptr);
-             }
+            else {
+                process = true;
+                SetTimer(hWnd, 0, 1000, nullptr);
+            }
         }
 
-   
-         if (wParam == VK_F11)
-         {
-             if (!process) {
-                 if (wParam == VK_CONTROL) {
-                         
-                     grid = lifeEngine.CalculateNext(grid);
-                     InvalidateRect(hWnd, nullptr, true);
-                 
-                 }
-                 else {
-                     grid = lifeEngine.CalculateNext(grid);
-                     InvalidateRect(hWnd, nullptr, true);
-                 }
-             }
-         }
+
+        if (wParam == VK_F11)
+        {
+            if (!process) {
+                if (GetKeyState(VK_CONTROL) & 0x8000)
+                    {
+                    grid = lifeEngine.CalculateNext(grid);
+                    InvalidateRect(hWnd, nullptr, true);
+                    grid = lifeEngine.CalculateNext(grid);
+                    InvalidateRect(hWnd, nullptr, true);
+                    grid = lifeEngine.CalculateNext(grid);
+                    InvalidateRect(hWnd, nullptr, true);
+                    grid = lifeEngine.CalculateNext(grid);
+                    InvalidateRect(hWnd, nullptr, true);
+                    grid = lifeEngine.CalculateNext(grid);
+                    InvalidateRect(hWnd, nullptr, true);
+                    }
+                else {
+                    grid = lifeEngine.CalculateNext(grid);
+                    InvalidateRect(hWnd, nullptr, true);
+                }
+            }
+        }
     case WM_MOUSEMOVE:
         coordinates.x = GET_X_LPARAM(lParam);
         coordinates.y = GET_Y_LPARAM(lParam);
-    break;
+        break;
     case WM_MOUSEHWHEEL:
         fwKeys = GET_KEYSTATE_WPARAM(wParam);
-        zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+        zDelta = GET_WHEEL_DELTA_WPARAM(wParam); 
+        
 
         break;
     case WM_PAINT:
-        {
-            GetClientRect(hWnd, &clientRect);
-            OnPaint(hWnd);
-        }
-        break;
+    {
+        GetClientRect(hWnd, &clientRect);
+        OnPaint(hWnd);
+    }
+    break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
